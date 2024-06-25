@@ -1,0 +1,47 @@
+{
+  "groups": [
+    {
+      "name": "ibb-boot.oauth.resourceserver",
+      "type": "com.SpringCloudApp.props.ResourceServerProps",
+      "sourceType": "com.SpringCloudApp.props.ResourceServerProps"
+    },
+    {
+      "name": "ibb-boot.oauth.resourceserver.cors",
+      "type": "com.SpringCloudApp.props.ResourceServerProps$Cors",
+      "sourceType": "com.SpringCloudApp.props.ResourceServerProps"
+    },
+    {
+      "name": "ibb-boot.oauth.resourceserver.token",
+      "type": "com.SpringCloudApp.props.ResourceServerProps$Token",
+      "sourceType": "com.SpringCloudApp.props.ResourceServerProps"
+    }
+  ],
+  "properties": [
+    {
+      "name": "ibb-boot.oauth.resourceserver.cors.origin",
+      "type": "java.lang.String",
+      "sourceType": "com.SpringCloudApp.props.ResourceServerProps$Cors"
+    },
+    {
+      "name": "ibb-boot.oauth.resourceserver.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.SpringCloudApp.props.ResourceServerProps"
+    },
+    {
+      "name": "ibb-boot.oauth.resourceserver.token.basic",
+      "type": "com.SpringCloudApp.props.BasicTokenProps",
+      "sourceType": "com.SpringCloudApp.props.ResourceServerProps$Token"
+    },
+    {
+      "name": "ibb-boot.oauth.resourceserver.token.jwt",
+      "type": "com.SpringCloudApp.props.JwtTokenProps",
+      "sourceType": "com.SpringCloudApp.props.ResourceServerProps$Token"
+    },
+    {
+      "name": "ibb-boot.oauth.resourceserver.token.type",
+      "type": "com.SpringCloudApp.props.BearerTokenType",
+      "sourceType": "com.SpringCloudApp.props.ResourceServerProps$Token"
+    }
+  ],
+  "hints": []
+}
