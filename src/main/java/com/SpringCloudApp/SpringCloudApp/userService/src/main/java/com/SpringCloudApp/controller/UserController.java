@@ -18,7 +18,6 @@ public class UserController {
     @GetMapping
     public String getTest(Authentication authentication){
 
-        int a =1;
         return " ";
     }
 }
