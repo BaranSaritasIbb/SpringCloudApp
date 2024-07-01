@@ -35,6 +35,16 @@ public class Users {
     @Column(name = "updated_date")
     private Date updated;
 
-
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstname + '\'' +
+                ", lastName='" + lastname + '\'' +
+                ", age='" + age + '\'' +
+                ", created='" + created + '\'' +
+                ", updated='" + updated + '\'' +
+                '}';
+    }
 
 }

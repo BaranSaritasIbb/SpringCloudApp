@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 @SpringBootApplication
-@ComponentScan("ist.ibb.boot.security")
+@ComponentScan(basePackages = {"com.SpringCloudApp","ist.ibb.boot.security"})
 public class UserServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);

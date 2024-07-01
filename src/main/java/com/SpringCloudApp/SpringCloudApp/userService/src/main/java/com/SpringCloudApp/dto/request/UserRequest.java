@@ -19,5 +19,15 @@ public class UserRequest {
     private int age;
     private Date created;
     private Date updated;
-
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstname + '\'' +
+                ", lastName='" + lastname + '\'' +
+                ", age='" + age + '\'' +
+                ", created='" + created + '\'' +
+                ", updated='" + updated + '\'' +
+                '}';
+    }
 }

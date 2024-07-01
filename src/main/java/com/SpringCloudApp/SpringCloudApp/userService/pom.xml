@@ -12,6 +12,9 @@
     <artifactId>userService</artifactId>
 
     <dependencies>
+
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -20,11 +23,11 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
-        <dependency>
-            <groupId>ist.ibb.boot</groupId>
-            <artifactId>ibb-boot-security</artifactId>
-            <version>1.1.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ist.ibb.boot</groupId>-->
+<!--            <artifactId>ibb-boot-security</artifactId>-->
+<!--            <version>1.1.1</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -54,7 +57,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-            <version>2.5.1</version>
         </dependency>
         <!-- aop -->
         <!-- db -->
@@ -81,6 +83,13 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-jackson</artifactId>
                 <version>0.11.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>3.0.5</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
