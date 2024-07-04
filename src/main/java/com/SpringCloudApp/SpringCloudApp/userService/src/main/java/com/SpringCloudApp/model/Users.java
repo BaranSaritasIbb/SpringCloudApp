@@ -1,6 +1,7 @@
 package com.SpringCloudApp.model;
 
 
+import com.SpringCloudApp.util.aop.date.DateFormatCheck;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +24,9 @@ public class Users {
     private Long id;
     private String firstname;
     private String lastname;
-    private int age;
-
+    private Integer age;
+  //  @DateFormatCheck(pattern = "yyyy-MM-dd", message = "Invalid date format for field")
+    private Date age2;
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")

@@ -20,7 +20,8 @@ public class AuditAspect {
     @Autowired
     private AuditLogRepository auditLogRepository;
 
-    @Pointcut("execution(* com.SpringCloudApp.service.Impl.UserServiceImpl.*(..))")
+    @Pointcut("execution(* com.SpringCloudApp.service.Impl.UserServiceImpl.*(..)) " +
+            "&& !execution(* com.SpringCloudApp.service.Impl.UserServiceImpl.get*(..))")
     public void userServiceMethods() {}
 
     @AfterReturning(pointcut = "userServiceMethods()", returning = "result")
@@ -38,7 +39,7 @@ public class AuditAspect {
             operation = "DELETE";
         }
 
-        // Log kaydı oluştur
+
         AuditLog auditLog = new AuditLog();
         auditLog.setEntityName("Employee");
         auditLog.setEntityId(((UserRequest) args[0]).getId());

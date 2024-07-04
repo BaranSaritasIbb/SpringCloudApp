@@ -6,8 +6,12 @@ import com.SpringCloudApp.mapper.UserMapper;
 import com.SpringCloudApp.model.Users;
 import com.SpringCloudApp.repository.UserRepository;
 import com.SpringCloudApp.service.UserService;
+import com.ibb.boot.data.service.Redis.RedisService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +19,8 @@ public class UserServiceImpl  implements UserService {
 
     private final UserRepository repository;
     private final UserMapper mapper;
+    private final RedisService redisService;
+    private final ModelMapper modelMapper;
 
     @Override
     public UserRequest getById(Long id) {
@@ -36,9 +42,20 @@ public class UserServiceImpl  implements UserService {
 
     @Override
     public UserRequest createUser(UserRequest userRequest) {
-        Users user = mapper.UserRequestToUser(userRequest);
+        Users user = modelMapper.map(userRequest,Users.class);
         user = repository.save(user);
         userRequest.setId(user.getId());
         return userRequest;
+    }
+
+    @Override
+    public List<UserRequest> getAllUser() {
+        List<Users> users = (List<Users>) redisService.getValue("allUsers");
+        if(users == null){
+            users = repository.findAll();
+            redisService.setValue("allUsers",users);
+        }
+        return mapper.userListToUserRequestList(users);
+
     }
 }
