@@ -6,45 +6,39 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Aspect
 @Component
 @Slf4j
-public class DateFormatCheckBusiness {
+public class DateFormatCheckBusiness implements ConstraintValidator<DateFormatCheck, LocalDate> {
 
-    @Before("execution(* *.*(..)) && @annotation(formatCheck)")
-    public void validateDateFormat(JoinPoint joinPoint, DateFormatCheck formatCheck) throws NoSuchFieldException, IllegalAccessException, ParseException {
-        Object[] args = joinPoint.getArgs();
+        private static final String DATE_PATTERN = "MM/dd/yyyy";
 
-        for (Object arg : args) {
-            Field[] fields = arg.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                if (field.isAnnotationPresent(DateFormatCheck.class)) {
-                    field.setAccessible(true);
-                    Object value = field.get(arg);
-                    if (value instanceof String) {
-                        String dateString = (String) value;
-                        String pattern = field.getAnnotation(DateFormatCheck.class).pattern();
-                        if (!isValidDateFormat(dateString, pattern)) {
-                            throw new IllegalArgumentException("Invalid date format: " + dateString + ". Expected format: " + pattern);
-                        }
-                    }
-                }
+        @Override
+        public void initialize(DateFormatCheck customDate) {
+        }
+
+        @Override
+        public boolean isValid(LocalDate customDateField,
+                               ConstraintValidatorContext cxt) {
+            SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
+            try
+            {
+                sdf.setLenient(false);
+                Date d = sdf.parse(String.valueOf(customDateField));
+                return true;
+            }
+            catch (ParseException e)
+            {
+                return false;
             }
         }
-    }
 
-    private boolean isValidDateFormat(String dateString, String pattern) {
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-            dateFormat.setLenient(false);
-            dateFormat.parse(dateString);
-            return true;
-        } catch (ParseException e) {
-            return false;
-        }
     }
-}

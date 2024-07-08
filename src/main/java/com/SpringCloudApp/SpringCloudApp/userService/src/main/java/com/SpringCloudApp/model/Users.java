@@ -10,7 +10,9 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +27,11 @@ public class Users {
     private String firstname;
     private String lastname;
     private Integer age;
+
+    @OneToMany(mappedBy = "users",targetEntity = ExcelSchema.class,fetch = FetchType.LAZY)
+    private List<ExcelSchema> excelSchemaList;
+    @DateFormatCheck
+    private LocalDate deneme;
   //  @DateFormatCheck(pattern = "yyyy-MM-dd", message = "Invalid date format for field")
     private Date age2;
     @CreationTimestamp

@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -24,5 +25,6 @@ public class Owner extends BaseEntity<Owner> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date age;
+    private LocalDate deneme;
 
 }

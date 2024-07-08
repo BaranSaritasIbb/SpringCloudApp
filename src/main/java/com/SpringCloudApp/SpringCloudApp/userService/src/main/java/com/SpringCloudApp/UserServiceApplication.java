@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@ComponentScan(basePackages = {"com.SpringCloudApp","ist.ibb.boot.security","com.ibb.boot.data"})
+@ComponentScan(basePackages = {"com.SpringCloudApp","com.SpringCloudApp.config","ist.ibb.boot.security","com.ibb.boot.data"})
 public class UserServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);

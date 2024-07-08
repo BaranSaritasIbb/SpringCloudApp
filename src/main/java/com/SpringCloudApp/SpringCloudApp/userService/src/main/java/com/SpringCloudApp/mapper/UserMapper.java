@@ -13,8 +13,6 @@ import java.util.List;
 public interface UserMapper {
 
 
-
-    void update(Object source, @MappingTarget Object target);
     UserRequest UserToUserRequest(Users user);
 
     Users UserRequestToUser(UserRequest userRequest);

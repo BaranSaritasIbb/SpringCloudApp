@@ -2,12 +2,12 @@ package com.SpringCloudApp.dto.request;
 
 
 import com.SpringCloudApp.util.aop.date.DateFormatCheck;
-import com.SpringCloudApp.util.helper.date.ValidDateFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -22,6 +22,8 @@ public class UserRequest {
     private Integer age;
    // @DateFormatCheck(pattern = "yyyy-MM-dd", message = "Invalid date format for field")
     private Date age2;
+    @DateFormatCheck
+    private LocalDate deneme;
     private Date created;
     private Date updated;
     @Override
