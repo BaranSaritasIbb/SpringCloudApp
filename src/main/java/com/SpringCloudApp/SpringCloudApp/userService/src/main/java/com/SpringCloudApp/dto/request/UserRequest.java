@@ -1,7 +1,9 @@
 package com.SpringCloudApp.dto.request;
 
 
-import com.SpringCloudApp.util.aop.date.DateFormatCheck;
+import com.SpringCloudApp.dto.excel.ExcelSchemaDTO;
+import com.ibb.boot.data.util.aop.TCKimlikNo;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,11 +21,11 @@ public class UserRequest {
 
     private Long id;
     private String firstname;
+    @TCKimlikNo
     private String lastname;
     private Integer age;
-   // @DateFormatCheck(pattern = "yyyy-MM-dd", message = "Invalid date format for field")
     private Date age2;
-    @DateFormatCheck
+    private List<ExcelSchemaDTO> excelSchemaList;
     private LocalDate deneme;
     private Date created;
     private Date updated;

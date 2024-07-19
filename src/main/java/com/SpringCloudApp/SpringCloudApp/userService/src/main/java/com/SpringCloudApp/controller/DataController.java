@@ -1,9 +1,10 @@
 package com.SpringCloudApp.controller;
 
-import com.SpringCloudApp.dto.excel.ValidationRequestDTO;
+
 import com.SpringCloudApp.service.excel.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,10 +17,10 @@ public class DataController {
 
     private final ValidationService validationService;
 
-    @PostMapping("/validate")
-    public String validateData(@RequestBody ValidationRequestDTO request) {
-        String isValid = validationService.validateColumns(request.getColumns(), request.getRowData());
-        return isValid;
+    @PostMapping("/validate/{schemaId}")
+    public String validateData(@PathVariable Long schemaId , @RequestParam("file") MultipartFile file) throws IOException {
+        return validationService.validateExcelFile(file, schemaId);
+
     }
 
 

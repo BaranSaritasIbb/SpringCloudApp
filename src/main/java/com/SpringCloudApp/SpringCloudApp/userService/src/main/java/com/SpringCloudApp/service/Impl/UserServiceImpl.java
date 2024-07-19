@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,12 +51,20 @@ public class UserServiceImpl  implements UserService {
 
     @Override
     public List<UserRequest> getAllUser() {
-        List<Users> users = (List<Users>) redisService.getValue("allUsers");
-        if(users == null){
-            users = repository.findAll();
-            redisService.setValue("allUsers",users);
+        //List<Users> users = (List<Users>) redisService.getValue("allUsers");
+    //    if(users == null){
+        List<Users> users = repository.findAll();
+        List<UserRequest> requests = new ArrayList<>();
+        for(Users user:users){
+            
+            UserRequest userRequest= modelMapper.map(user,UserRequest.class);
+
+            userRequest.getExcelSchemaList().forEach(i->i.setUserId(user.getId()));
+            requests.add(userRequest);
         }
-        return mapper.userListToUserRequestList(users);
+     //       redisService.setValue("allUsers",users);
+      //  }
+        return requests;
 
     }
 }

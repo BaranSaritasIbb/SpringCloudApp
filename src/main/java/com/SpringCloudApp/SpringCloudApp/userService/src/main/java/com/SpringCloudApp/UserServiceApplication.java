@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 @SpringBootApplication
-@EnableAspectJAutoProxy(proxyTargetClass = true)
+@EnableAspectJAutoProxy
 @ComponentScan(basePackages = {"com.SpringCloudApp","com.SpringCloudApp.config","ist.ibb.boot.security","com.ibb.boot.data"})
 public class UserServiceApplication {
     public static void main(String[] args) {

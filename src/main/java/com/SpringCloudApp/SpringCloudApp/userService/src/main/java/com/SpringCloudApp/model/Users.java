@@ -1,7 +1,6 @@
 package com.SpringCloudApp.model;
 
 
-import com.SpringCloudApp.util.aop.date.DateFormatCheck;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,9 +29,7 @@ public class Users {
 
     @OneToMany(mappedBy = "users",targetEntity = ExcelSchema.class,fetch = FetchType.LAZY)
     private List<ExcelSchema> excelSchemaList;
-    @DateFormatCheck
     private LocalDate deneme;
-  //  @DateFormatCheck(pattern = "yyyy-MM-dd", message = "Invalid date format for field")
     private Date age2;
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
