@@ -18,7 +18,7 @@ public class DataController {
     private final ValidationService validationService;
 
     @PostMapping("/validate/{schemaId}")
-    public String validateData(@PathVariable Long schemaId , @RequestParam("file") MultipartFile file) throws IOException {
+    public String validateData(@PathVariable Long schemaId , @RequestParam("file") MultipartFile file) throws Exception {
         return validationService.validateExcelFile(file, schemaId);
 
     }
