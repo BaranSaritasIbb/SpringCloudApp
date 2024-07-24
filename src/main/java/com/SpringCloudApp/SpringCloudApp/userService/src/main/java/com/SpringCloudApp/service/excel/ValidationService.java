@@ -29,7 +29,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ValidationService {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Örneğin, tarih formatı
-
+    private int errorRoleBackCount=0;
 
     private final ExcelSchemaService excelSchemaService;
 
@@ -88,7 +88,7 @@ public class ValidationService {
         return usersList;
     }
 
-    public List<Map<String, Object>> readExcelFile(MultipartFile file,ExcelSchemaDTO schema) throws IOException {
+    public List<Map<String, Object>> readExcelFile(MultipartFile file, ExcelSchemaDTO schema) throws IOException {
         List<Map<String, Object>> rows = new ArrayList<>();
         try (InputStream inputStream = file.getInputStream();
              Workbook workbook = new XSSFWorkbook(inputStream)) {
@@ -100,80 +100,101 @@ public class ValidationService {
             List<ExcelFieldDTO> columns = schema.getColumns();
 
             int rowCounter = 0;
-            for (int i = 0; i < columns.size(); i++) {
+            for (int i = 0; i < headerRow.getLastCellNum(); i++) {
                 Cell cell = headerRow.getCell(i);
-                if(cell != null){
-
-                String columnName = headerRow.getCell(rowCounter).getStringCellValue();
-                if (cell == null || !cell.getStringCellValue().equalsIgnoreCase(columns.get(rowCounter).getColumnName())) {
-                    throw new IllegalArgumentException("Başlık " + columns.get(i).getColumnName() + " bekleniyor ama " + (cell == null ? "yok" : cell.getStringCellValue()) + " bulundu.");
-                }
+                if (cell != null && findFieldColumn(columns, cell, rowCounter)) {
+                    String columnName = headerRow.getCell(rowCounter).getStringCellValue();
+                    if (cell == null || !cell.getStringCellValue().equalsIgnoreCase(columns.get(rowCounter).getColumnName())) {
+                        throw new IllegalArgumentException("Başlık " + columns.get(i).getColumnName() + " bekleniyor ama " + (cell == null ? "yok" : cell.getStringCellValue()) + " bulundu.");
+                    }
                     rowCounter++;
+                }
+                if (i + 1 == headerRow.getLastCellNum() && rowCounter != columns.size()) {
+                    throw new IllegalArgumentException("Başlık " + columns.get(rowCounter).getColumnName() + " bekleniyor ama " + "yok");
                 }
             }
 
+            int cellCounter = 1;
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-                int cellIndex = 0;
-                Row row = sheet.getRow(i);
-                Map<String, Object> rowData = new HashMap<>();
-                boolean check = checkIfRowIsEmpty(row);
-                if(!check) {
-                    for (Cell cell : row) {
-                        int columnIndex = cell.getColumnIndex();
-                        String columnName = headerRow.getCell(columnIndex).getStringCellValue();
+                Row row = sheet.getRow(cellCounter);
+                if (row != null) {
+                    Map<String, Object> rowData = new HashMap<>();
+                    boolean check = checkIfRowIsEmpty(row);
 
-                        switch (cell.getCellType()) {
-                            case STRING:
-                                String colName = columns.get(cellIndex).getColumnType();
-                                String cellValue = cell.getStringCellValue();
-                                if (isDate(cellValue) && Objects.equals(colName, "TARIH")) {
-                                    try {
-                                        Date date = dateFormat.parse(cellValue);
-                                        rowData.put(columnName, date);
-                                    } catch (ParseException e) {
-                                        // Tarih formatı hatası
-                                        e.printStackTrace();
+                    if (!check) {
+                        int cellColumnGlobalIndex = 0;
+                        boolean cellColumnGlobalIndexFlag = false;
+                        for (int j = 0; j < headerRow.getLastCellNum(); j++) {
+                            Cell cell = row.getCell(j);
+                            Cell cellHeader = headerRow.getCell(j);
+                            if (cell != null && cellHeader != null) {
+                                String columnName = headerRow.getCell(j).getStringCellValue();
+
+                                if (findFieldColumn(columns, cellHeader, cellColumnGlobalIndex)) {
+                                    switch (cell.getCellType()) {
+                                        case STRING:
+                                            String colName = columns.get(cellColumnGlobalIndex).getColumnType();
+                                            String cellValue = cell.getStringCellValue();
+                                            if (isDate(cellValue) && Objects.equals(colName, "TARIH")) {
+                                                try {
+                                                    Date date = dateFormat.parse(cellValue);
+                                                    rowData.put(columnName, date);
+                                                } catch (ParseException e) {
+                                                    // Tarih formatı hatası
+                                                    e.printStackTrace();
+                                                }
+                                            } else {
+                                                rowData.put(columnName, cellValue);
+                                            }
+                                            break;
+                                        case NUMERIC:
+                                            if (DateUtil.isCellDateFormatted(cell)) {
+                                                rowData.put(columnName, cell.getDateCellValue());
+                                            } else {
+                                                double numericValue = cell.getNumericCellValue();
+                                                if (numericValue == (int) numericValue) {
+                                                    rowData.put(columnName, (int) numericValue);
+                                                } else {
+                                                    rowData.put(columnName, numericValue);
+                                                }
+                                            }
+                                            break;
+                                        case BOOLEAN:
+                                            rowData.put(columnName, cell.getBooleanCellValue());
+                                            break;
+                                        case FORMULA:
+                                            rowData.put(columnName, cell.getCellFormula());
+                                            break;
+                                        case BLANK:
+                                            rowData.put(columnName, "");
+                                            break;
+                                        default:
+                                            rowData.put(columnName, cell.toString());
+                                            break;
                                     }
-                                } else {
-                                    rowData.put(columnName, cellValue);
+                                    cellColumnGlobalIndex++;
                                 }
-                                break;
-                            case NUMERIC:
-                                if (DateUtil.isCellDateFormatted(cell)) {
-                                    rowData.put(columnName, cell.getDateCellValue());
-                                } else {
-                                    double numericValue = cell.getNumericCellValue();
-                                    // Check if the numeric value is an integer
-                                    if (numericValue == (int) numericValue) {
-                                        rowData.put(columnName, (int) numericValue);
-                                    } else {
-                                        rowData.put(columnName, numericValue);
-                                    }
-                                }
-                                break;
-                            case BOOLEAN:
-                                rowData.put(columnName, cell.getBooleanCellValue());
-                                break;
-                            case FORMULA:
-                                rowData.put(columnName, cell.getCellFormula());
-                                break;
-                            case BLANK:
-                                rowData.put(columnName, "");
-                                break;
-                            default:
-                                rowData.put(columnName, cell.toString());
-                                break;
+                            }
                         }
-                        cellIndex++;
+                        rows.add(rowData);
                     }
-                    rows.add(rowData);
                 }
-
+                cellCounter++;
             }
         }
         return rows;
     }
+
+    private boolean findFieldColumn(List<ExcelFieldDTO> column, Cell cell,int columnIndex){
+        if(cell.getStringCellValue().equalsIgnoreCase(column.get(columnIndex).getColumnName())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
     private boolean isDate(String value) {
         try {
             DateFormat df = new SimpleDateFormat(dateFormat.toPattern());
