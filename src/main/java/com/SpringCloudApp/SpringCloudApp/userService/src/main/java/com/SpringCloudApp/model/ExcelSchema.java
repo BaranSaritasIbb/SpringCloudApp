@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.internal.util.stereotypes.Lazy;
 
 import java.util.List;
 
@@ -26,7 +25,6 @@ public class ExcelSchema {
     private Long id;
 
     @OneToMany(mappedBy = "excelSchema", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Lazy
     private List<ExcelField> columns;
     @ManyToOne
     @JoinColumn(name="user_id",referencedColumnName = "id")

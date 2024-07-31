@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.internal.util.stereotypes.Lazy;
 
 @Entity
 @Getter
@@ -26,6 +25,5 @@ public class ExcelField {
     private boolean required;
     @ManyToOne
     @JoinColumn(name="excel_schema_id",referencedColumnName = "id")
-    @Lazy
     private ExcelSchema excelSchema;
 }

@@ -23,8 +23,9 @@
 	</developers>
 	<modules>
 		<module>src/main/java/com/SpringCloudApp/SpringCloudApp/userService</module>
-		<module>src/main/java/com/SpringCloudApp/SpringCloudApp/companyService</module>
-	</modules>
+		<module>src/main/java/com/SpringCloudApp/SpringCloudApp/accountService</module>
+		<module>src/main/java/com/SpringCloudApp/SpringCloudApp/eureka-server</module>
+    </modules>
 	<scm>
 		<connection/>
 		<developerConnection/>
@@ -36,14 +37,6 @@
 		<spring-cloud.version>2023.0.2</spring-cloud.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
