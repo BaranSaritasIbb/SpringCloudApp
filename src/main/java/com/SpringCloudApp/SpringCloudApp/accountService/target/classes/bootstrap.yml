@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: account-service
+  cloud:
+    config:
+      profile: native
+      uri: http://localhost:8888
+
+eureka:
+  instance:
+    hostname: account-service
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8888/eureka
