@@ -103,8 +103,7 @@ public class ValidationService {
             int rowCounter = 0;
             for (int i = 0; i < headerRow.getLastCellNum(); i++) {
                 Cell cell = headerRow.getCell(i);
-                if (cell != null && findFieldColumn(columns, cell, rowCounter)) {
-                    String columnName = headerRow.getCell(rowCounter).getStringCellValue();
+                if (cell != null && !Objects.equals(cell.getStringCellValue(), "") && findFieldColumn(columns, cell, rowCounter)) {
                     if (cell == null || !cell.getStringCellValue().equalsIgnoreCase(columns.get(rowCounter).getColumnName())) {
                         throw new IllegalArgumentException("Başlık " + columns.get(i).getColumnName() + " bekleniyor ama " + (cell == null ? "yok" : cell.getStringCellValue()) + " bulundu.");
                     }
